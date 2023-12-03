@@ -33,6 +33,18 @@ class _LoginState extends State<Login> {
     }
   }
 
+  // regular expression to check if string
+  RegExp pass_valid = RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)");
+  //A function that validate user entered password
+  bool validatePassword(String pass){
+    String _password = pass.trim();
+    if(pass_valid.hasMatch(_password)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,12 +99,15 @@ class _LoginState extends State<Login> {
                         ),
                         TextFormField(
                           controller: TextEditingController(text: user.email),
+                          keyboardType: TextInputType.emailAddress,
                           onChanged: (val) {
                             user.email = val;
                           },
                           validator: (value) {
-                            if (value == null) {
-                              return 'Password is Empty';
+                            if (value == null || 
+                      !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+") 
+                          .hasMatch(value)) {
+                              return 'Enter a valid email!';
                             }
                             return null;
                           },
@@ -128,11 +143,20 @@ class _LoginState extends State<Login> {
                           onChanged: (val) {
                             user.password = val;
                           },
+                          keyboardType: TextInputType.emailAddress, 
                           validator: (value) {
-                            if (value == null) {
-                              return 'Email is Empty';
-                            }
-                            return null;
+                            if(value!.isEmpty){
+                              return "Please enter password";
+                            }else{
+                            //call function to check password
+                              bool result = validatePassword(value);
+                              if(result){
+                                // create account event
+                              return null;
+                              }else{
+                                return " Password should contain Capital, small letter & Number & Special";
+                              }
+                          }
                           },
                           style: TextStyle(fontSize: 30, color: Colors.white),
                           decoration: InputDecoration(
