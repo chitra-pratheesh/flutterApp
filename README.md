@@ -26,7 +26,7 @@ cd flutterApp
 
 `Run Command`
 ```
-flutter run
+flutter run -d chrome 
 ```
 
 `Or Open VSCode and`
